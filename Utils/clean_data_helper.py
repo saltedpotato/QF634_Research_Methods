@@ -33,7 +33,6 @@ def clean_goog_news(entries):
     news["date"] = dates
     news["title"] = titles
     news["source"] = sources
-    print(news.shape)
     return news
 
 # topics supported: 'tech', 'news', 'business', 'science', 'finance', 'food', 'politics', 'economics', 'travel', 'entertainment', 'music', 'sport', 'world'
