@@ -2,6 +2,10 @@ import pandas as pd
 import time
 import sys, os
 from newscatcher import Newscatcher, urls
+import gensim.downloader
+import numpy as np
+
+model_glove_twitter = gensim.downloader.load('glove-twitter-25')
 
 # Disable
 def blockPrint():
@@ -71,4 +75,22 @@ def clean_newscatcher_news(t):
     return news
 
 
+def get_topic(phrase):
+    topics = ['tech', 'news', 'business', 'science', 'finance', 'food', 'politics', 'economics', 'travel', 'entertainment', 'music', 'sport', 'world']
+    phrase = phrase.split(" ")[0].lower()
+    similarity = 0
+    topic = ''
 
+    try:
+        vec2 = model_glove_twitter[phrase]
+        for t in topics:
+            vec1 = model_glove_twitter[t]
+            curr_similarity = np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
+            if curr_similarity > similarity:
+                topic = t
+                similarity = curr_similarity
+    except:
+        return topic
+
+    return topic
+            
