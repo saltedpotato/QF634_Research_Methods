@@ -6,7 +6,8 @@ import gensim.downloader
 import numpy as np
 import re
 from collections import Counter
-
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import CountVectorizer
 
 model_glove_twitter = gensim.downloader.load('glove-twitter-25')
 
@@ -102,4 +103,28 @@ def get_topic(phrase):
     else:
         largest_value = max(ret_topics, key=ret_topics.get)
         return largest_value
+
+def remove_similar_news(df_train, col, threshold=0.8):
+    vectorizer = CountVectorizer()
+    vectors = vectorizer.fit_transform(df_train[col])
+
+    cos_sim = cosine_similarity(vectors)
+
+    to_remove = []
+    threshold = 0.85
+    for r in range(len(cos_sim)):
+        if r in to_remove:
+            continue
+
+        for c in range(len(cos_sim)-r):
+            if r == c:
+                continue
+            similarity = cos_sim[r,c]
+            if similarity > threshold:
+                to_remove += [c]
+                
+    df_train = df_train.drop(df_train.index[to_remove])
+    df_train = df_train.reset_index(drop=True)
+    return df_train
+
             
