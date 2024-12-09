@@ -4,6 +4,9 @@ import sys, os
 from newscatcher import Newscatcher, urls
 import gensim.downloader
 import numpy as np
+import re
+from collections import Counter
+
 
 model_glove_twitter = gensim.downloader.load('glove-twitter-25')
 
@@ -74,18 +77,12 @@ def clean_newscatcher_news(t):
     print(f"Unsupported URL count: {len(unsupported_urls)}")
     return news
 
-
 def get_topic(phrase):
-    topics = ['tech', 'news', 'business', 'science', 'finance', 'food', 'politics', 'economics', 'travel', 'entertainment', 'music', 'sport', 'world']
-    phrase1 = re.sub(r'[^a-zA-Z]+', '', phrase.sample(1).item().split(" ")[-1].lower())
-    phrase2 = re.sub(r'[^a-zA-Z]+', '', phrase.sample(1).item().split(" ")[0].lower())
-    phrase3 = re.sub(r'[^a-zA-Z]+', '', phrase.sample(1).item().split(" ")[-1].lower())
-    phrase4 = re.sub(r'[^a-zA-Z]+', '', phrase.sample(1).item().split(" ")[0].lower())
+    topics = ['tech', 'news', 'business', 'science', 'finance', 'politics', 'economics', 'travel', 'entertainment', 'music', 'world']
+    ret_topics = Counter() 
 
-    phrases = [phrase1, phrase2, phrase3, phrase4]
-    ret_topics = []
-
-    for p in phrases:
+    for i in range(5):
+        p = re.sub(r'[^a-zA-Z]+', '', phrase.sample(1).item().split(" ")[0].lower())
         similarity = 0
         topic = ''
         try:
@@ -98,7 +95,11 @@ def get_topic(phrase):
                     similarity = curr_similarity
         except:
             continue
-        ret_topics += [topic]
 
-    return "|".join(ret_topics)
+        ret_topics.update([topic])
+    if len(ret_topics) == 0:
+        return ''
+    else:
+        largest_value = max(ret_topics, key=ret_topics.get)
+        return largest_value
             
