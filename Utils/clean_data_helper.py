@@ -77,20 +77,28 @@ def clean_newscatcher_news(t):
 
 def get_topic(phrase):
     topics = ['tech', 'news', 'business', 'science', 'finance', 'food', 'politics', 'economics', 'travel', 'entertainment', 'music', 'sport', 'world']
-    phrase = phrase.split(" ")[0].lower()
-    similarity = 0
-    topic = ''
+    phrase1 = re.sub(r'[^a-zA-Z]+', '', phrase.sample(1).item().split(" ")[-1].lower())
+    phrase2 = re.sub(r'[^a-zA-Z]+', '', phrase.sample(1).item().split(" ")[0].lower())
+    phrase3 = re.sub(r'[^a-zA-Z]+', '', phrase.sample(1).item().split(" ")[-1].lower())
+    phrase4 = re.sub(r'[^a-zA-Z]+', '', phrase.sample(1).item().split(" ")[0].lower())
 
-    try:
-        vec2 = model_glove_twitter[phrase]
-        for t in topics:
-            vec1 = model_glove_twitter[t]
-            curr_similarity = np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
-            if curr_similarity > similarity:
-                topic = t
-                similarity = curr_similarity
-    except:
-        return topic
+    phrases = [phrase1, phrase2, phrase3, phrase4]
+    ret_topics = []
 
-    return topic
+    for p in phrases:
+        similarity = 0
+        topic = ''
+        try:
+            vec2 = model_glove_twitter[p]
+            for t in topics:
+                vec1 = model_glove_twitter[t]
+                curr_similarity = np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
+                if curr_similarity > similarity:
+                    topic = t
+                    similarity = curr_similarity
+        except:
+            continue
+        ret_topics += [topic]
+
+    return "|".join(ret_topics)
             
