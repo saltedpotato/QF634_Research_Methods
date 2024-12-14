@@ -8,6 +8,7 @@ import re
 from collections import Counter
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer
+import random
 
 model_glove_twitter = gensim.downloader.load('glove-twitter-25')
 
@@ -44,8 +45,14 @@ def clean_goog_news(entries):
     return news
 
 # topics supported: 'tech', 'news', 'business', 'science', 'finance', 'food', 'politics', 'economics', 'travel', 'entertainment', 'music', 'sport', 'world'
+import random
 def clean_newscatcher_news(t, n = "All"):
     supported_urls = urls(topic = t, language = 'en') 
+    if n != "All":
+        if n <= len(supported_urls):
+            supported_urls = random.sample(supported_urls, n)  # Select 3 random items            
+
+    
     print(f"No. of URLs: {len(supported_urls)}")
     print(supported_urls)
 
@@ -54,16 +61,10 @@ def clean_newscatcher_news(t, n = "All"):
     sources = []
     unsupported_urls = []
     for url in supported_urls:
-        blockPrint()
         nc = Newscatcher(website = url, topic = t)
         results = nc.get_news()
-        enablePrint()
         try:
-            if n != "All":
-                articles = results['articles'].sample(n)
-            else:
-                articles = results['articles']
-        
+            articles = results['articles']
             for article in articles:
                 dates += [article["published"]]
                 titles += [article["title"]]
@@ -108,6 +109,7 @@ def get_topic(phrase):
         return largest_value
 
 def remove_similar_news(df, col, threshold=0.8):
+    df = df.reset_index(drop=True)
     vectorizer = CountVectorizer()
     vectors = vectorizer.fit_transform(df[col])
 
@@ -131,6 +133,7 @@ def remove_similar_news(df, col, threshold=0.8):
     return df
 
 def remove_irrelevant_news(df, col, threshold=0.1, threshold_size = 0.1):
+    df = df.reset_index(drop=True)
     vectorizer = CountVectorizer()
     vectors = vectorizer.fit_transform(df[col])
 
@@ -140,7 +143,7 @@ def remove_irrelevant_news(df, col, threshold=0.1, threshold_size = 0.1):
 
     for r in range(len(cos_sim)):
         # considered irrelevant if the article is too different from the rest
-        perc_unsimilar = len(np.where(cos_sim[r] <= threshold))/len(cos_sim[r])
+        perc_unsimilar = len(cos_sim[r][cos_sim[r] <= threshold])/len(cos_sim[r])
         
         if perc_unsimilar >= threshold_size:
             to_remove += [r]
