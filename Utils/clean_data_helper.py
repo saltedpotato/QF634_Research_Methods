@@ -107,14 +107,14 @@ def get_topic(phrase):
         largest_value = max(ret_topics, key=ret_topics.get)
         return largest_value
 
-def remove_similar_news(df_train, col, threshold=0.8):
+def remove_similar_news(df, col, threshold=0.8):
     vectorizer = CountVectorizer()
-    vectors = vectorizer.fit_transform(df_train[col])
+    vectors = vectorizer.fit_transform(df[col])
 
     cos_sim = cosine_similarity(vectors)
 
     to_remove = []
-    threshold = 0.85
+
     for r in range(len(cos_sim)):
         if r in to_remove:
             continue
@@ -126,8 +126,26 @@ def remove_similar_news(df_train, col, threshold=0.8):
             if similarity > threshold:
                 to_remove += [c]
                 
-    df_train = df_train.drop(df_train.index[to_remove])
-    df_train = df_train.reset_index(drop=True)
-    return df_train
+    df = df.drop(df.index[to_remove])
+    df = df.reset_index(drop=True)
+    return df
 
-            
+def remove_irrelevant_news(df, col, threshold=0.1, threshold_size = 0.1):
+    vectorizer = CountVectorizer()
+    vectors = vectorizer.fit_transform(df[col])
+
+    cos_sim = cosine_similarity(vectors)
+
+    to_remove = []
+
+    for r in range(len(cos_sim)):
+        # considered irrelevant if the article is too different from the rest
+        perc_unsimilar = len(np.where(cos_sim[r] <= threshold))/len(cos_sim[r])
+        
+        if perc_unsimilar >= threshold_size:
+            to_remove += [r]
+        
+                
+    df = df.drop(df.index[to_remove])
+    df = df.reset_index(drop=True)
+    return df            
