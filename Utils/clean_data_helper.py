@@ -44,7 +44,7 @@ def clean_goog_news(entries):
     return news
 
 # topics supported: 'tech', 'news', 'business', 'science', 'finance', 'food', 'politics', 'economics', 'travel', 'entertainment', 'music', 'sport', 'world'
-def clean_newscatcher_news(t):
+def clean_newscatcher_news(t, n = "All"):
     supported_urls = urls(topic = t, language = 'en') 
     print(f"No. of URLs: {len(supported_urls)}")
     print(supported_urls)
@@ -59,7 +59,10 @@ def clean_newscatcher_news(t):
         results = nc.get_news()
         enablePrint()
         try:
-            articles = results['articles']
+            if n != "All":
+                articles = results['articles'].sample(n)
+            else:
+                articles = results['articles']
         
             for article in articles:
                 dates += [article["published"]]
