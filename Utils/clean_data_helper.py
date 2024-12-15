@@ -3,7 +3,6 @@ from Utils.import_packages import *
 from newscatcher import Newscatcher, urls
 import gensim.downloader
 from collections import Counter
-from sklearn.feature_extraction.text import CountVectorizer
 
 model_glove_twitter = gensim.downloader.load('glove-twitter-25')
 

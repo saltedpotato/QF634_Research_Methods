@@ -7,6 +7,9 @@ import random
 from datetime import datetime, timedelta
 from tqdm import tqdm
 
-from sklearn.metrics import pairwise
+from sklearn.metrics import pairwise, accuracy_score, classification_report
+from sklearn.feature_extraction.text import CountVectorizer
+
+import nltk
 
 import warnings
