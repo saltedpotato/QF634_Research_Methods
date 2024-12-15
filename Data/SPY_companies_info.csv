@@ -74,7 +74,7 @@ UNP,Union Pacific Corporation,142.46B
 ANET,Arista Networks Inc,141.56B
 ETN,Eaton Corporation plc,140.70B
 TJX,"The TJX Companies, Inc.",140.35B
-AMAT,"Applied Materials, Inc.",139.61B
+AMAT,"Applied Materials, Inc.",137.80B
 KKR,KKR & Co. Inc.,137.09B
 C,Citigroup Inc.,134.30B
 BSX,Boston Scientific Corporation,132.81B
@@ -266,7 +266,6 @@ DD,"DuPont de Nemours, Inc.",33.79B
 MLM,"Martin Marietta Materials, Inc.",33.67B
 CCL,Carnival Corporation & plc,33.64B
 ROK,"Rockwell Automation, Inc.",33.55B
-HPQ,HP Inc.,33.30B
 MTB,M&T Bank Corporation,33.07B
 HUM,Humana Inc.,33.01B
 EFX,Equifax Inc.,32.95B
@@ -275,6 +274,7 @@ VICI,VICI Properties Inc.,32.82B
 RJF,"Raymond James Financial, Inc.",32.75B
 TTWO,"Take-Two Interactive Software, Inc.",32.58B
 HIG,"The Hartford Financial Services Group, Inc.",32.49B
+HPQ,HP Inc.,32.40B
 MCHP,Microchip Technology Incorporated,32.18B
 AVB,"AvalonBay Communities, Inc.",32.16B
 ED,"Consolidated Edison, Inc.",32.11B
