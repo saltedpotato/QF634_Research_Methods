@@ -1,14 +1,9 @@
-import pandas as pd
-import time
-import sys, os
+from Utils.import_packages import *
+
 from newscatcher import Newscatcher, urls
 import gensim.downloader
-import numpy as np
-import re
 from collections import Counter
-from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer
-import random
 
 model_glove_twitter = gensim.downloader.load('glove-twitter-25')
 
@@ -113,7 +108,7 @@ def remove_similar_news(df, col, threshold=0.8):
     vectorizer = CountVectorizer()
     vectors = vectorizer.fit_transform(df[col])
 
-    cos_sim = cosine_similarity(vectors)
+    cos_sim = pairwise.cosine_similarity(vectors)
 
     to_remove = []
 
@@ -137,7 +132,7 @@ def remove_irrelevant_news(df, col, threshold=0.1, threshold_size = 0.1):
     vectorizer = CountVectorizer()
     vectors = vectorizer.fit_transform(df[col])
 
-    cos_sim = cosine_similarity(vectors)
+    cos_sim = pairwise.cosine_similarity(vectors)
 
     to_remove = []
 
