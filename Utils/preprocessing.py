@@ -4,6 +4,7 @@ from nltk.corpus import stopwords, wordnet
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from nltk import pos_tag
+import string
 
 # Download NLTK data
 nltk.download('averaged_perceptron_tagger')
